@@ -51,7 +51,7 @@ export default function MinistryDashboard() {
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
-                <Pie data={companiesByCategory} dataKey="count" nameKey="categorie" cx="50%" cy="50%" outerRadius={100} label={({ categorie, percent }) => `${categorie} ${(percent*100).toFixed(0)}%`} labelLine={false} fontSize={10}>
+                <Pie data={companiesByCategory} dataKey="count" nameKey="categorie" cx="50%" cy="50%" outerRadius={100} label={({ name, percent }: any) => `${name} ${(percent*100).toFixed(0)}%`} labelLine={false} fontSize={10}>
                   {companiesByCategory.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
                 </Pie>
                 <Tooltip />
