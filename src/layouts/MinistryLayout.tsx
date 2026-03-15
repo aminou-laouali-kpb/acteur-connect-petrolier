@@ -1,0 +1,98 @@
+import { Outlet, useLocation } from 'react-router-dom';
+import { NavLink } from '@/components/NavLink';
+import { RoleSwitcher } from '@/components/RoleSwitcher';
+import { useAuth } from '@/contexts/AuthContext';
+import {
+  Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
+  SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger, useSidebar,
+} from '@/components/ui/sidebar';
+import { LayoutDashboard, Building2, Search, FileText, BarChart3, History, Settings, LogOut } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+
+const menuItems = [
+  { title: 'Tableau de bord', url: '/ministere/dashboard', icon: LayoutDashboard },
+  { title: 'Entreprises', url: '/ministere/entreprises', icon: Building2 },
+  { title: 'Opportunités', url: '/ministere/opportunites', icon: Search },
+  { title: 'Candidatures', url: '/ministere/candidatures', icon: FileText },
+  { title: 'Rapports', url: '/ministere/rapports', icon: BarChart3 },
+  { title: 'Journal d\'audit', url: '/ministere/audit', icon: History },
+  { title: 'Paramètres', url: '/ministere/parametres', icon: Settings },
+];
+
+function MinistrySidebar() {
+  const { state } = useSidebar();
+  const collapsed = state === 'collapsed';
+
+  return (
+    <Sidebar collapsible="icon">
+      <SidebarContent>
+        <div className="p-4">
+          {!collapsed && (
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-8 h-8 rounded bg-sidebar-primary flex items-center justify-center shrink-0">
+                <span className="text-sidebar-primary-foreground font-heading font-bold text-xs">MP</span>
+              </div>
+              <div className="overflow-hidden">
+                <p className="font-heading font-bold text-sm text-sidebar-foreground truncate">Back-office</p>
+                <p className="text-xs text-sidebar-foreground/60 truncate">Ministère du Pétrole</p>
+              </div>
+            </div>
+          )}
+        </div>
+        <SidebarGroup>
+          <SidebarGroupLabel>Administration</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {menuItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <NavLink
+                      to={item.url}
+                      end={item.url === '/ministere/dashboard'}
+                      className="hover:bg-sidebar-accent"
+                      activeClassName="bg-sidebar-accent text-sidebar-primary font-medium"
+                    >
+                      <item.icon className="h-4 w-4 mr-2" />
+                      {!collapsed && <span>{item.title}</span>}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+    </Sidebar>
+  );
+}
+
+export default function MinistryLayout() {
+  const { currentUser, logout } = useAuth();
+
+  return (
+    <SidebarProvider>
+      <div className="min-h-screen flex w-full">
+        <MinistrySidebar />
+        <div className="flex-1 flex flex-col">
+          <header className="h-14 flex items-center justify-between border-b bg-card px-4">
+            <div className="flex items-center gap-2">
+              <SidebarTrigger />
+              <span className="text-sm font-medium text-muted-foreground hidden md:block">
+                {currentUser?.nom || 'Administration'}
+              </span>
+            </div>
+            <div className="flex items-center gap-3">
+              <RoleSwitcher />
+              <Button variant="ghost" size="icon" onClick={logout}>
+                <LogOut className="h-4 w-4" />
+              </Button>
+            </div>
+          </header>
+          <main className="flex-1 p-6 bg-background overflow-auto">
+            <Outlet />
+          </main>
+        </div>
+      </div>
+    </SidebarProvider>
+  );
+}
