@@ -43,7 +43,7 @@ export default function HomePage() {
               <Button asChild size="lg" className="bg-gold hover:bg-gold/90 text-gold-foreground font-heading font-semibold">
                 <Link to="/inscription">Inscrire mon entreprise</Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10">
+              <Button asChild size="lg" variant="outline" className="border-primary-foreground/30 text-foreground bg-primary-foreground hover:bg-primary-foreground/90">
                 <Link to="/opportunites">Consulter les opportunités</Link>
               </Button>
               <Button asChild size="lg" variant="ghost" className="text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10">
