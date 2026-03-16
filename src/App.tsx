@@ -22,6 +22,7 @@ import ContactPage from "@/pages/Contact";
 
 // Auth pages
 import LoginPage from "@/pages/Login";
+import AdminLoginPage from "@/pages/AdminLogin";
 import SignupPage from "@/pages/Signup";
 import ForgotPasswordPage from "@/pages/ForgotPassword";
 
