@@ -4,10 +4,25 @@ import { StatusBadge } from '@/components/StatusBadge';
 import { mockApplications } from '@/data/mock-data';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { FileText, Eye } from 'lucide-react';
-import { toast } from 'sonner';
 
 export default function CompanyApplications() {
   const myApps = mockApplications.filter(a => a.entrepriseId === '1');
+
+  if (myApps.length === 0) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-2xl font-heading font-bold">Mes candidatures</h1>
+          <p className="text-sm text-muted-foreground">0 candidature(s)</p>
+        </div>
+        <div className="text-center py-16">
+          <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+          <h3 className="font-heading font-semibold mb-2">Aucune candidature</h3>
+          <p className="text-sm text-muted-foreground">Consultez les opportunités pour soumettre votre première candidature.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -44,14 +59,6 @@ export default function CompanyApplications() {
           </Table>
         </CardContent>
       </Card>
-
-      {myApps.length === 0 && (
-        <div className="text-center py-16">
-          <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-          <h3 className="font-heading font-semibold mb-2">Aucune candidature</h3>
-          <p className="text-sm text-muted-foreground">Consultez les opportunités pour soumettre votre première candidature.</p>
-        </div>
-      )}
     </div>
   );
 }

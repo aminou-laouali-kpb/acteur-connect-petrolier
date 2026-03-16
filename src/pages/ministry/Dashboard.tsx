@@ -13,7 +13,7 @@ export default function MinistryDashboard() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-heading font-bold">Tableau de bord — Ministère</h1>
-        <p className="text-sm text-muted-foreground">Vue d'ensemble du contenu local pétrolier</p>
+        <p className="text-sm text-muted-foreground">Vue d'ensemble du contenu local pétrolier · Dernière mise à jour : {new Date().toLocaleDateString('fr-FR')}</p>
       </div>
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
