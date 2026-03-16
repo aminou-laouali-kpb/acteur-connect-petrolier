@@ -43,6 +43,7 @@ import AuditLog from "@/pages/ministry/AuditLog";
 import Settings from "@/pages/ministry/Settings";
 
 import NotFound from "@/pages/NotFound";
+import ChatbotButton from "@/components/ChatbotButton";
 
 const queryClient = new QueryClient();
 
@@ -94,6 +95,7 @@ const App = () => (
 
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <ChatbotButton />
         </BrowserRouter>
       </AuthProvider>
     </TooltipProvider>
