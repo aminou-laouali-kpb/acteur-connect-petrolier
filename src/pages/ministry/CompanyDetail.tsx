@@ -5,8 +5,10 @@ import { StatusBadge } from '@/components/StatusBadge';
 import { Progress } from '@/components/ui/progress';
 import { Textarea } from '@/components/ui/textarea';
 import { mockCompanies } from '@/data/mock-data';
-import { ArrowLeft, CheckCircle, XCircle, MessageSquare, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, CheckCircle, XCircle, MessageSquare, AlertTriangle, ChevronRight, Home, Award, Wrench, Briefcase } from 'lucide-react';
 import { toast } from 'sonner';
+import { ConfirmDialog } from '@/components/ConfirmDialog';
+import { Badge } from '@/components/ui/badge';
 
 export default function CompanyDetail() {
   const { id } = useParams();
@@ -14,11 +16,23 @@ export default function CompanyDetail() {
 
   if (!company) return <div className="text-center py-16"><h1 className="text-xl font-bold">Entreprise introuvable</h1></div>;
 
+  // Mock references
+  const references = [
+    { titre: 'Maintenance préventive Bloc Agadem', client: 'CNPC Niger', periode: '2022-2024', montant: '450M FCFA' },
+    { titre: 'Réhabilitation compresseurs SORAZ', client: 'SORAZ SA', periode: '2022', montant: '120M FCFA' },
+    { titre: 'Installation électrique site minier', client: 'SOPAMIN', periode: '2021', montant: '85M FCFA' },
+  ];
+
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Button asChild variant="ghost" size="sm"><Link to="/ministere/entreprises"><ArrowLeft className="mr-2 h-4 w-4" />Retour</Link></Button>
-      </div>
+      {/* Breadcrumb */}
+      <nav className="flex items-center gap-1 text-sm text-muted-foreground">
+        <Link to="/ministere/dashboard" className="hover:text-foreground flex items-center gap-1"><Home className="h-3 w-3" />Dashboard</Link>
+        <ChevronRight className="h-3 w-3" />
+        <Link to="/ministere/entreprises" className="hover:text-foreground">Entreprises</Link>
+        <ChevronRight className="h-3 w-3" />
+        <span className="text-foreground">{company.sigle}</span>
+      </nav>
 
       <div className="flex items-start justify-between">
         <div>
@@ -29,10 +43,30 @@ export default function CompanyDetail() {
           </div>
         </div>
         <div className="flex gap-2">
-          <Button onClick={() => toast.success('Entreprise validée')} className="bg-success hover:bg-success/90 text-success-foreground"><CheckCircle className="mr-2 h-4 w-4" />Valider</Button>
+          <ConfirmDialog
+            trigger={<Button className="bg-success hover:bg-success/90 text-success-foreground"><CheckCircle className="mr-2 h-4 w-4" />Valider</Button>}
+            title="Valider cette entreprise ?"
+            description={`Confirmez-vous la validation du profil de ${company.raisonSociale} ? L'entreprise pourra ensuite postuler aux opportunités.`}
+            confirmLabel="Valider"
+            onConfirm={() => toast.success(`${company.sigle} validé`)}
+          />
           <Button variant="outline" onClick={() => toast.info('Demande envoyée')}><MessageSquare className="mr-2 h-4 w-4" />Complément</Button>
-          <Button variant="outline" onClick={() => toast.error('Entreprise rejetée')} className="text-destructive"><XCircle className="mr-2 h-4 w-4" />Rejeter</Button>
-          <Button variant="outline" onClick={() => toast.warning('Entreprise suspendue')}><AlertTriangle className="mr-2 h-4 w-4" />Suspendre</Button>
+          <ConfirmDialog
+            trigger={<Button variant="outline" className="text-destructive"><XCircle className="mr-2 h-4 w-4" />Rejeter</Button>}
+            title="Rejeter cette entreprise ?"
+            description={`Cette action rejettera le dossier de ${company.raisonSociale}. L'entreprise sera notifiée et devra soumettre un nouveau dossier.`}
+            confirmLabel="Rejeter"
+            variant="destructive"
+            onConfirm={() => toast.error('Entreprise rejetée')}
+          />
+          <ConfirmDialog
+            trigger={<Button variant="outline"><AlertTriangle className="mr-2 h-4 w-4" />Suspendre</Button>}
+            title="Suspendre cette entreprise ?"
+            description={`Le profil de ${company.raisonSociale} sera suspendu. L'entreprise ne pourra plus postuler aux opportunités jusqu'à réactivation.`}
+            confirmLabel="Suspendre"
+            variant="destructive"
+            onConfirm={() => toast.warning('Entreprise suspendue')}
+          />
         </div>
       </div>
 
@@ -66,6 +100,53 @@ export default function CompanyDetail() {
                 <div><span className="text-muted-foreground">Effectif total</span><p className="text-lg font-bold">{company.effectifTotal}</p></div>
                 <div><span className="text-muted-foreground">Effectif nigérien</span><p className="text-lg font-bold">{company.effectifNigerien}</p></div>
                 <div><span className="text-muted-foreground">Taille</span><p className="text-lg font-bold">{company.tailleEntreprise}</p></div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Certifications */}
+          {company.certifications && company.certifications.length > 0 && (
+            <Card>
+              <CardHeader><CardTitle className="flex items-center gap-2"><Award className="h-5 w-5 text-gold" />Certifications</CardTitle></CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap gap-2">
+                  {company.certifications.map((cert, i) => (
+                    <Badge key={i} variant="secondary" className="text-sm">{cert}</Badge>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Équipements */}
+          {company.equipements && company.equipements.length > 0 && (
+            <Card>
+              <CardHeader><CardTitle className="flex items-center gap-2"><Wrench className="h-5 w-5 text-gold" />Équipements</CardTitle></CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap gap-2">
+                  {company.equipements.map((eq, i) => (
+                    <Badge key={i} variant="outline" className="text-sm">{eq}</Badge>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Références projets */}
+          <Card>
+            <CardHeader><CardTitle className="flex items-center gap-2"><Briefcase className="h-5 w-5 text-gold" />Références projets</CardTitle></CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {references.map((ref, i) => (
+                  <div key={i} className="border rounded-lg p-4">
+                    <h4 className="font-medium text-sm">{ref.titre}</h4>
+                    <div className="grid grid-cols-3 gap-2 mt-2 text-xs text-muted-foreground">
+                      <span>Client : <strong className="text-foreground">{ref.client}</strong></span>
+                      <span>Période : <strong className="text-foreground">{ref.periode}</strong></span>
+                      <span>Montant : <strong className="text-foreground">{ref.montant}</strong></span>
+                    </div>
+                  </div>
+                ))}
               </div>
             </CardContent>
           </Card>

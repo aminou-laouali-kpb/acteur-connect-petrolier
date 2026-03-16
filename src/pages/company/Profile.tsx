@@ -10,11 +10,23 @@ import { Progress } from '@/components/ui/progress';
 import { useAuth } from '@/contexts/AuthContext';
 import { REGIONS, CATEGORIES } from '@/types';
 import { toast } from 'sonner';
-import { Save, Upload } from 'lucide-react';
+import { Save, Upload, CheckCircle, Circle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+const tabCompletion: Record<string, boolean> = {
+  general: true,
+  representant: true,
+  activites: true,
+  capacites: true,
+  references: true,
+  documents: false,
+  declaration: false,
+};
 
 export default function CompanyProfile() {
   const { currentCompany } = useAuth();
   const c = currentCompany!;
+  const [activeTab, setActiveTab] = useState('general');
 
   const handleSave = () => toast.success('Profil sauvegardé', { description: 'Vos modifications ont été enregistrées.' });
 
@@ -34,18 +46,32 @@ export default function CompanyProfile() {
         </div>
       </div>
 
-      <Tabs defaultValue="general" className="space-y-4">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList className="flex-wrap h-auto gap-1">
-          <TabsTrigger value="general">Informations générales</TabsTrigger>
-          <TabsTrigger value="representant">Représentant légal</TabsTrigger>
-          <TabsTrigger value="activites">Activités</TabsTrigger>
-          <TabsTrigger value="capacites">Capacités</TabsTrigger>
-          <TabsTrigger value="references">Références</TabsTrigger>
-          <TabsTrigger value="documents">Documents</TabsTrigger>
-          <TabsTrigger value="declaration">Déclaration</TabsTrigger>
+          {[
+            { value: 'general', label: 'Informations générales' },
+            { value: 'representant', label: 'Représentant légal' },
+            { value: 'activites', label: 'Activités' },
+            { value: 'capacites', label: 'Capacités' },
+            { value: 'references', label: 'Références' },
+            { value: 'documents', label: 'Documents' },
+            { value: 'declaration', label: 'Déclaration' },
+          ].map(tab => (
+            <TabsTrigger key={tab.value} value={tab.value} className="flex items-center gap-1.5">
+              {tabCompletion[tab.value] ? (
+                <CheckCircle className="h-3.5 w-3.5 text-success" />
+              ) : (
+                <Circle className="h-3.5 w-3.5 text-muted-foreground" />
+              )}
+              {tab.label}
+            </TabsTrigger>
+          ))}
         </TabsList>
 
-        <TabsContent value="general">
+        <AnimatePresence mode="wait">
+          <motion.div key={activeTab} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.15 }}>
+
+        <TabsContent value="general" forceMount={activeTab === 'general' ? true : undefined}>
           <Card><CardHeader><CardTitle>Informations générales</CardTitle></CardHeader><CardContent className="space-y-4">
             <div className="grid sm:grid-cols-2 gap-4">
               <div><Label>Raison sociale</Label><Input defaultValue={c.raisonSociale} /></div>
@@ -67,7 +93,7 @@ export default function CompanyProfile() {
           </CardContent></Card>
         </TabsContent>
 
-        <TabsContent value="representant">
+        <TabsContent value="representant" forceMount={activeTab === 'representant' ? true : undefined}>
           <Card><CardHeader><CardTitle>Représentant légal</CardTitle></CardHeader><CardContent className="space-y-4">
             <div className="grid sm:grid-cols-2 gap-4">
               <div><Label>Nom</Label><Input defaultValue="Diallo" /></div>
@@ -81,19 +107,19 @@ export default function CompanyProfile() {
           </CardContent></Card>
         </TabsContent>
 
-        <TabsContent value="activites">
+        <TabsContent value="activites" forceMount={activeTab === 'activites' ? true : undefined}>
           <Card><CardHeader><CardTitle>Activités</CardTitle></CardHeader><CardContent className="space-y-4">
             <div className="grid sm:grid-cols-2 gap-4">
               <div><Label>Secteur principal</Label><Select defaultValue={c.secteurPrincipal}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{CATEGORIES.map(cat=><SelectItem key={cat} value={cat}>{cat}</SelectItem>)}</SelectContent></Select></div>
               <div><Label>Type d'acteur</Label><Select defaultValue="prestataire"><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem value="prestataire">Prestataire de services</SelectItem><SelectItem value="fournisseur">Fournisseur</SelectItem><SelectItem value="soustraitant">Sous-traitant</SelectItem></SelectContent></Select></div>
             </div>
             <div><Label>Description courte</Label><Textarea defaultValue={c.descriptionCourte} rows={3} /></div>
-            <div><Label>Description détaillée</Label><Textarea defaultValue="SAHEL SERVICES INDUSTRIELS SA est une société spécialisée dans la maintenance industrielle, la soudure haute pression et la mécanique de précision. Nous intervenons principalement sur les installations pétrolières et minières au Niger, avec une expertise reconnue en maintenance préventive et corrective." rows={5} /></div>
+            <div><Label>Description détaillée</Label><Textarea defaultValue="SAHEL SERVICES INDUSTRIELS SA est une société spécialisée dans la maintenance industrielle, la soudure haute pression et la mécanique de précision." rows={5} /></div>
             <div><Label>Zones d'intervention</Label><Input defaultValue="Niamey, Agadez, Diffa, Zinder" /></div>
           </CardContent></Card>
         </TabsContent>
 
-        <TabsContent value="capacites">
+        <TabsContent value="capacites" forceMount={activeTab === 'capacites' ? true : undefined}>
           <Card><CardHeader><CardTitle>Capacités et moyens</CardTitle></CardHeader><CardContent className="space-y-4">
             <div className="grid sm:grid-cols-3 gap-4">
               <div><Label>Effectif total</Label><Input type="number" defaultValue={c.effectifTotal} /></div>
@@ -104,7 +130,7 @@ export default function CompanyProfile() {
               <div><Label>Taille d'entreprise</Label><Select defaultValue={c.tailleEntreprise.toLowerCase()}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem value="tpe">TPE</SelectItem><SelectItem value="pme">PME</SelectItem><SelectItem value="eti">ETI</SelectItem><SelectItem value="ge">GE</SelectItem></SelectContent></Select></div>
               <div><Label>Certifications</Label><Input defaultValue="ISO 9001, Certification HSE" /></div>
             </div>
-            <div><Label>Équipements principaux</Label><Textarea defaultValue="12 postes de soudure TIG/MIG, 3 groupes électrogènes, 2 camions-ateliers, outillage de métrologie" rows={3} /></div>
+            <div><Label>Équipements principaux</Label><Textarea defaultValue="12 postes de soudure TIG/MIG, 3 groupes électrogènes, 2 camions-ateliers" rows={3} /></div>
             <div className="grid sm:grid-cols-2 gap-4">
               <div><Label>Politique HSE</Label><Select defaultValue="oui"><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem value="oui">Oui</SelectItem><SelectItem value="non">Non</SelectItem></SelectContent></Select></div>
               <div><Label>Assurance professionnelle</Label><Select defaultValue="oui"><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem value="oui">Oui</SelectItem><SelectItem value="non">Non</SelectItem></SelectContent></Select></div>
@@ -114,10 +140,10 @@ export default function CompanyProfile() {
           </CardContent></Card>
         </TabsContent>
 
-        <TabsContent value="references">
+        <TabsContent value="references" forceMount={activeTab === 'references' ? true : undefined}>
           <Card><CardHeader><CardTitle>Références</CardTitle></CardHeader><CardContent className="space-y-4">
             <div><Label>Principaux clients</Label><Textarea defaultValue="CNPC Niger Petroleum, SORAZ, SOPAMIN, Orano Mining Niger" rows={2} /></div>
-            <div><Label>Expérience dans le secteur pétrolier</Label><Textarea defaultValue="Maintenance des installations de production du Bloc Agadem (2020-2024), révision des compresseurs pour SORAZ (2022)" rows={3} /></div>
+            <div><Label>Expérience dans le secteur pétrolier</Label><Textarea defaultValue="Maintenance des installations de production du Bloc Agadem (2020-2024)" rows={3} /></div>
             <div><Label>Expérience hors secteur pétrolier</Label><Textarea defaultValue="Maintenance électromécanique pour la cimenterie de Malbaza (2019-2021)" rows={2} /></div>
             <h4 className="font-heading font-semibold mt-6 mb-3">Projets de référence</h4>
             {[
@@ -137,7 +163,7 @@ export default function CompanyProfile() {
           </CardContent></Card>
         </TabsContent>
 
-        <TabsContent value="documents">
+        <TabsContent value="documents" forceMount={activeTab === 'documents' ? true : undefined}>
           <Card><CardHeader><CardTitle>Documents</CardTitle></CardHeader><CardContent>
             <div className="space-y-4">
               {[
@@ -162,15 +188,18 @@ export default function CompanyProfile() {
           </CardContent></Card>
         </TabsContent>
 
-        <TabsContent value="declaration">
+        <TabsContent value="declaration" forceMount={activeTab === 'declaration' ? true : undefined}>
           <Card><CardHeader><CardTitle>Déclaration finale</CardTitle></CardHeader><CardContent className="space-y-4">
-            <p className="text-sm text-muted-foreground">En soumettant ce dossier, je certifie que les informations fournies sont exactes et complètes. Je m'engage à mettre à jour mon profil en cas de changement.</p>
+            <p className="text-sm text-muted-foreground">En soumettant ce dossier, je certifie que les informations fournies sont exactes et complètes.</p>
             <label className="flex items-start gap-2"><input type="checkbox" className="mt-1 rounded" /><span className="text-sm">Je certifie l'exactitude des informations fournies dans ce dossier.</span></label>
             <label className="flex items-start gap-2"><input type="checkbox" className="mt-1 rounded" /><span className="text-sm">J'autorise le Ministère du Pétrole à vérifier les informations déclarées.</span></label>
             <label className="flex items-start gap-2"><input type="checkbox" className="mt-1 rounded" /><span className="text-sm">J'accepte les conditions d'utilisation de la plateforme.</span></label>
             <Button className="bg-gold hover:bg-gold/90 text-gold-foreground">Soumettre le dossier pour validation</Button>
           </CardContent></Card>
         </TabsContent>
+
+          </motion.div>
+        </AnimatePresence>
       </Tabs>
     </div>
   );

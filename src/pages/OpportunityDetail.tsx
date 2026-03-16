@@ -2,12 +2,15 @@ import { useParams, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { StatusBadge } from '@/components/StatusBadge';
+import { DeadlineBadge } from '@/components/DeadlineBadge';
 import { mockOpportunities } from '@/data/mock-data';
+import { useAuth } from '@/contexts/AuthContext';
 import { OPPORTUNITY_TYPES } from '@/types';
-import { ArrowLeft, Calendar, MapPin, Building, FileText, Send } from 'lucide-react';
+import { ArrowLeft, Calendar, MapPin, Building, FileText, Send, ChevronRight, Home } from 'lucide-react';
 
 export default function OpportunityDetailPage() {
   const { id } = useParams();
+  const { isAuthenticated, currentRole } = useAuth();
   const opp = mockOpportunities.find(o => o.id === id);
 
   if (!opp) {
@@ -19,16 +22,32 @@ export default function OpportunityDetailPage() {
     );
   }
 
+  const getCTALink = () => {
+    if (isAuthenticated && currentRole === 'entreprise') return '/entreprise/candidatures';
+    return '/connexion';
+  };
+
+  const getCTALabel = () => {
+    if (isAuthenticated && currentRole === 'entreprise') return 'Soumettre ma candidature';
+    return 'Se connecter pour postuler';
+  };
+
   return (
     <div>
       <section className="bg-primary py-12">
         <div className="container">
-          <Button asChild variant="ghost" size="sm" className="text-primary-foreground/70 hover:text-primary-foreground mb-4">
-            <Link to="/opportunites"><ArrowLeft className="mr-2 h-4 w-4" />Retour aux opportunités</Link>
-          </Button>
+          {/* Breadcrumb */}
+          <nav className="flex items-center gap-1 text-sm text-primary-foreground/60 mb-4">
+            <Link to="/" className="hover:text-primary-foreground flex items-center gap-1"><Home className="h-3 w-3" />Accueil</Link>
+            <ChevronRight className="h-3 w-3" />
+            <Link to="/opportunites" className="hover:text-primary-foreground">Opportunités</Link>
+            <ChevronRight className="h-3 w-3" />
+            <span className="text-primary-foreground/80">{opp.reference}</span>
+          </nav>
           <div className="flex items-start gap-3 mb-2">
             <StatusBadge status={opp.statut} />
             <span className="text-sm text-primary-foreground/60 font-mono">{opp.reference}</span>
+            <DeadlineBadge dateLimite={opp.dateLimite} />
           </div>
           <h1 className="text-2xl lg:text-3xl font-heading font-bold text-primary-foreground">{opp.titre}</h1>
         </div>
@@ -69,7 +88,7 @@ export default function OpportunityDetailPage() {
 
               {opp.statut === 'publiee' && (
                 <Button asChild className="w-full bg-gold hover:bg-gold/90 text-gold-foreground">
-                  <Link to="/connexion"><Send className="mr-2 h-4 w-4" />Soumettre ma candidature</Link>
+                  <Link to={getCTALink()}><Send className="mr-2 h-4 w-4" />{getCTALabel()}</Link>
                 </Button>
               )}
             </div>

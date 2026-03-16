@@ -5,15 +5,26 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { StatusBadge } from '@/components/StatusBadge';
 import { mockCompanies } from '@/data/mock-data';
-import { REGIONS, CATEGORIES } from '@/types';
-import { Search, MapPin, Users, ArrowRight } from 'lucide-react';
+import { REGIONS, CATEGORIES, STATUS_LABELS } from '@/types';
+import { Search, MapPin, Users, ArrowRight, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Pagination } from '@/components/Pagination';
+import type { CompanyStatus } from '@/types';
+
+const ITEMS_PER_PAGE = 9;
 
 export default function DirectoryPage() {
   const [search, setSearch] = useState('');
   const [region, setRegion] = useState('all');
   const [category, setCategory] = useState('all');
   const [status, setStatus] = useState('all');
+  const [page, setPage] = useState(1);
+
+  const hasFilters = search || region !== 'all' || category !== 'all' || status !== 'all';
+
+  const resetFilters = () => {
+    setSearch(''); setRegion('all'); setCategory('all'); setStatus('all'); setPage(1);
+  };
 
   const filtered = mockCompanies.filter((c) => {
     if (search && !c.raisonSociale.toLowerCase().includes(search.toLowerCase()) && !c.sigle.toLowerCase().includes(search.toLowerCase())) return false;
@@ -22,6 +33,9 @@ export default function DirectoryPage() {
     if (status !== 'all' && c.status !== status) return false;
     return true;
   });
+
+  const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+  const paged = filtered.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
 
   return (
     <div>
@@ -34,39 +48,47 @@ export default function DirectoryPage() {
 
       <section className="py-8">
         <div className="container">
-          <div className="flex flex-wrap gap-3 mb-8">
+          <div className="flex flex-wrap gap-3 mb-4">
             <div className="relative flex-1 min-w-[200px]">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input placeholder="Rechercher une entreprise..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-10" />
+              <Input placeholder="Rechercher une entreprise..." value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} className="pl-10" />
             </div>
-            <Select value={region} onValueChange={setRegion}>
+            <Select value={region} onValueChange={(v) => { setRegion(v); setPage(1); }}>
               <SelectTrigger className="w-[160px]"><SelectValue placeholder="Région" /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Toutes les régions</SelectItem>
                 {REGIONS.map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}
               </SelectContent>
             </Select>
-            <Select value={category} onValueChange={setCategory}>
+            <Select value={category} onValueChange={(v) => { setCategory(v); setPage(1); }}>
               <SelectTrigger className="w-[200px]"><SelectValue placeholder="Catégorie" /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Toutes catégories</SelectItem>
                 {CATEGORIES.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
               </SelectContent>
             </Select>
-            <Select value={status} onValueChange={setStatus}>
-              <SelectTrigger className="w-[160px]"><SelectValue placeholder="Statut" /></SelectTrigger>
+            <Select value={status} onValueChange={(v) => { setStatus(v); setPage(1); }}>
+              <SelectTrigger className="w-[180px]"><SelectValue placeholder="Statut" /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Tous statuts</SelectItem>
-                <SelectItem value="valide">Validé</SelectItem>
-                <SelectItem value="en_revue">En revue</SelectItem>
+                {(Object.entries(STATUS_LABELS) as [CompanyStatus, string][]).map(([k, v]) => (
+                  <SelectItem key={k} value={k}>{v}</SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
 
-          <p className="text-sm text-muted-foreground mb-4">{filtered.length} entreprise(s) trouvée(s)</p>
+          <div className="flex items-center justify-between mb-6">
+            <p className="text-sm text-muted-foreground">{filtered.length} entreprise(s) trouvée(s)</p>
+            {hasFilters && (
+              <Button variant="ghost" size="sm" onClick={resetFilters}>
+                <RotateCcw className="mr-2 h-3 w-3" />Réinitialiser les filtres
+              </Button>
+            )}
+          </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filtered.map((company) => (
+            {paged.map((company) => (
               <Card key={company.id} className="hover:shadow-md transition-shadow">
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between mb-3">
@@ -90,11 +112,14 @@ export default function DirectoryPage() {
             ))}
           </div>
 
+          <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+
           {filtered.length === 0 && (
             <div className="text-center py-16">
               <Search className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <h3 className="font-heading font-semibold mb-2">Aucune entreprise trouvée</h3>
-              <p className="text-sm text-muted-foreground">Modifiez vos critères de recherche.</p>
+              <p className="text-sm text-muted-foreground mb-4">Modifiez vos critères de recherche.</p>
+              <Button variant="outline" onClick={resetFilters}><RotateCcw className="mr-2 h-4 w-4" />Réinitialiser</Button>
             </div>
           )}
         </div>
