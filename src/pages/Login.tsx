@@ -47,6 +47,9 @@ export default function LoginPage() {
             <p className="text-center text-sm text-muted-foreground mt-4">
               Pas encore inscrit ? <Link to="/inscription" className="text-gold hover:underline font-medium">Créer un compte</Link>
             </p>
+            <p className="text-center text-xs text-muted-foreground mt-2">
+              <Link to="/admin" className="hover:underline">Espace agents du Ministère →</Link>
+            </p>
           </CardContent>
         </Card>
 
