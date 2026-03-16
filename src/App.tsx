@@ -22,6 +22,7 @@ import ContactPage from "@/pages/Contact";
 
 // Auth pages
 import LoginPage from "@/pages/Login";
+import AdminLoginPage from "@/pages/AdminLogin";
 import SignupPage from "@/pages/Signup";
 import ForgotPasswordPage from "@/pages/ForgotPassword";
 
@@ -69,6 +70,7 @@ const App = () => (
 
             {/* Auth routes */}
             <Route path="/connexion" element={<LoginPage />} />
+            <Route path="/admin" element={<AdminLoginPage />} />
             <Route path="/inscription" element={<SignupPage />} />
             <Route path="/mot-de-passe-oublie" element={<ForgotPasswordPage />} />
 
