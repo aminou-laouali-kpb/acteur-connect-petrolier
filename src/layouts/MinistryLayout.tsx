@@ -6,12 +6,12 @@ import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
   SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger, useSidebar,
 } from '@/components/ui/sidebar';
-import { LayoutDashboard, Building2, Search, FileText, BarChart3, History, Settings, LogOut } from 'lucide-react';
+import { LayoutDashboard, ShieldCheck, Search, FileText, BarChart3, History, Settings, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const menuItems = [
   { title: 'Tableau de bord', url: '/ministere/dashboard', icon: LayoutDashboard },
-  { title: 'Entreprises', url: '/ministere/entreprises', icon: Building2 },
+  { title: 'Registre', url: '/ministere/entreprises', icon: ShieldCheck },
   { title: 'Opportunités', url: '/ministere/opportunites', icon: Search },
   { title: 'Candidatures', url: '/ministere/candidatures', icon: FileText },
   { title: 'Rapports', url: '/ministere/rapports', icon: BarChart3 },
@@ -33,8 +33,8 @@ function MinistrySidebar() {
                 <span className="text-sidebar-primary-foreground font-heading font-bold text-xs">MP</span>
               </div>
               <div className="overflow-hidden">
-                <p className="font-heading font-bold text-sm text-sidebar-foreground truncate">Back-office</p>
-                <p className="text-xs text-sidebar-foreground/60 truncate">Ministère du Pétrole</p>
+                <p className="font-heading font-bold text-sm text-sidebar-foreground truncate">Registre National</p>
+                <p className="text-xs text-sidebar-foreground/60 truncate">Contenu Local Pétrolier</p>
               </div>
             </div>
           )}

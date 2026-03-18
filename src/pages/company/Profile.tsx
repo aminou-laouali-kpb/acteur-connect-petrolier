@@ -28,14 +28,14 @@ export default function CompanyProfile() {
   const c = currentCompany!;
   const [activeTab, setActiveTab] = useState('general');
 
-  const handleSave = () => toast.success('Profil sauvegardé', { description: 'Vos modifications ont été enregistrées.' });
+  const handleSave = () => toast.success('Dossier sauvegardé', { description: 'Vos modifications ont été enregistrées.' });
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-heading font-bold">Profil entreprise</h1>
-          <p className="text-sm text-muted-foreground">Complétez votre dossier pour être qualifié</p>
+          <h1 className="text-2xl font-heading font-bold">Dossier de qualification</h1>
+          <p className="text-sm text-muted-foreground">Complétez votre dossier pour être qualifié et accéder aux marchés du secteur pétrolier</p>
         </div>
         <div className="flex items-center gap-3">
           <div className="text-right hidden sm:block">
@@ -164,7 +164,7 @@ export default function CompanyProfile() {
         </TabsContent>
 
         <TabsContent value="documents" forceMount={activeTab === 'documents' ? true : undefined}>
-          <Card><CardHeader><CardTitle>Documents</CardTitle></CardHeader><CardContent>
+          <Card><CardHeader><CardTitle>Documents requis pour la qualification</CardTitle></CardHeader><CardContent>
             <div className="space-y-4">
               {[
                 { nom: 'NIF', statut: 'uploaded' },
@@ -190,11 +190,11 @@ export default function CompanyProfile() {
 
         <TabsContent value="declaration" forceMount={activeTab === 'declaration' ? true : undefined}>
           <Card><CardHeader><CardTitle>Déclaration finale</CardTitle></CardHeader><CardContent className="space-y-4">
-            <p className="text-sm text-muted-foreground">En soumettant ce dossier, je certifie que les informations fournies sont exactes et complètes.</p>
-            <label className="flex items-start gap-2"><input type="checkbox" className="mt-1 rounded" /><span className="text-sm">Je certifie l'exactitude des informations fournies dans ce dossier.</span></label>
+            <p className="text-sm text-muted-foreground">En soumettant ce dossier de qualification, je certifie que les informations fournies sont exactes et complètes.</p>
+            <label className="flex items-start gap-2"><input type="checkbox" className="mt-1 rounded" /><span className="text-sm">Je certifie l'exactitude des informations fournies dans ce dossier de qualification.</span></label>
             <label className="flex items-start gap-2"><input type="checkbox" className="mt-1 rounded" /><span className="text-sm">J'autorise le Ministère du Pétrole à vérifier les informations déclarées.</span></label>
-            <label className="flex items-start gap-2"><input type="checkbox" className="mt-1 rounded" /><span className="text-sm">J'accepte les conditions d'utilisation de la plateforme.</span></label>
-            <Button className="bg-gold hover:bg-gold/90 text-gold-foreground">Soumettre le dossier pour validation</Button>
+            <label className="flex items-start gap-2"><input type="checkbox" className="mt-1 rounded" /><span className="text-sm">J'accepte les conditions d'utilisation du Registre National du Contenu Local.</span></label>
+            <Button className="bg-gold hover:bg-gold/90 text-gold-foreground">Soumettre le dossier de qualification</Button>
           </CardContent></Card>
         </TabsContent>
 

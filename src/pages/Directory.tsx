@@ -5,11 +5,11 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { StatusBadge } from '@/components/StatusBadge';
 import { mockCompanies } from '@/data/mock-data';
-import { REGIONS, CATEGORIES, STATUS_LABELS } from '@/types';
-import { Search, MapPin, Users, ArrowRight, RotateCcw } from 'lucide-react';
+import { REGIONS, CATEGORIES, QUALIFICATION_STATUS_LABELS } from '@/types';
+import { Search, MapPin, Users, ArrowRight, RotateCcw, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Pagination } from '@/components/Pagination';
-import type { CompanyStatus } from '@/types';
+import type { QualificationStatus } from '@/types';
 
 const ITEMS_PER_PAGE = 9;
 
@@ -41,8 +41,11 @@ export default function DirectoryPage() {
     <div>
       <section className="bg-primary py-12">
         <div className="container">
-          <h1 className="text-3xl font-heading font-bold text-primary-foreground mb-2">Annuaire des entreprises</h1>
-          <p className="text-primary-foreground/80">Répertoire des acteurs nationaux du secteur pétrolier au Niger.</p>
+          <div className="flex items-center gap-3 mb-2">
+            <ShieldCheck className="h-8 w-8 text-gold" />
+            <h1 className="text-3xl font-heading font-bold text-primary-foreground">Registre officiel des entreprises qualifiées</h1>
+          </div>
+          <p className="text-primary-foreground/80">Répertoire officiel des acteurs nationaux qualifiés du secteur pétrolier au Niger — Ministère du Pétrole.</p>
         </div>
       </section>
 
@@ -68,10 +71,10 @@ export default function DirectoryPage() {
               </SelectContent>
             </Select>
             <Select value={status} onValueChange={(v) => { setStatus(v); setPage(1); }}>
-              <SelectTrigger className="w-[180px]"><SelectValue placeholder="Statut" /></SelectTrigger>
+              <SelectTrigger className="w-[220px]"><SelectValue placeholder="Statut de qualification" /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Tous statuts</SelectItem>
-                {(Object.entries(STATUS_LABELS) as [CompanyStatus, string][]).map(([k, v]) => (
+                {(Object.entries(QUALIFICATION_STATUS_LABELS) as [QualificationStatus, string][]).map(([k, v]) => (
                   <SelectItem key={k} value={k}>{v}</SelectItem>
                 ))}
               </SelectContent>
@@ -105,7 +108,7 @@ export default function DirectoryPage() {
                     <span className="flex items-center gap-1"><Users className="h-3 w-3" />{company.effectifTotal} employés</span>
                   </div>
                   <Button asChild variant="link" size="sm" className="px-0 text-gold">
-                    <Link to={`/annuaire/${company.id}`}>Voir le profil <ArrowRight className="ml-1 h-3 w-3" /></Link>
+                    <Link to={`/annuaire/${company.id}`}>Voir le dossier <ArrowRight className="ml-1 h-3 w-3" /></Link>
                   </Button>
                 </CardContent>
               </Card>
