@@ -8,7 +8,7 @@ import { useState } from 'react';
 const navItems = [
   { href: '/', label: 'Accueil' },
   { href: '/opportunites', label: 'Opportunités' },
-  { href: '/annuaire', label: 'Annuaire' },
+  { href: '/annuaire', label: 'Registre' },
   { href: '/a-propos', label: 'À propos' },
   { href: '/faq', label: 'FAQ' },
   { href: '/contact', label: 'Contact' },
@@ -36,8 +36,8 @@ export default function PublicLayout() {
               <span className="text-primary-foreground font-heading font-bold text-lg">CL</span>
             </div>
             <div className="hidden sm:block">
-              <p className="font-heading font-bold text-sm leading-tight">Contenu Local</p>
-              <p className="text-xs text-muted-foreground">Plateforme Nationale</p>
+              <p className="font-heading font-bold text-sm leading-tight">Registre National</p>
+              <p className="text-xs text-muted-foreground">Contenu Local Pétrolier</p>
             </div>
           </Link>
 
@@ -103,9 +103,9 @@ export default function PublicLayout() {
         <div className="container py-12">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
-              <h3 className="font-heading font-bold mb-4">Contenu Local</h3>
+              <h3 className="font-heading font-bold mb-4">Registre National du Contenu Local</h3>
               <p className="text-sm text-primary-foreground/70">
-                Plateforme nationale des acteurs et des opportunités du contenu local pétrolier au Niger.
+                Plateforme officielle de recensement, qualification et mise en relation des entreprises nationales du secteur pétrolier au Niger.
               </p>
             </div>
             <div>
@@ -113,7 +113,7 @@ export default function PublicLayout() {
               <ul className="space-y-2 text-sm text-primary-foreground/70">
                 <li><Link to="/" className="hover:text-primary-foreground transition-colors">Accueil</Link></li>
                 <li><Link to="/opportunites" className="hover:text-primary-foreground transition-colors">Opportunités</Link></li>
-                <li><Link to="/annuaire" className="hover:text-primary-foreground transition-colors">Annuaire</Link></li>
+                <li><Link to="/annuaire" className="hover:text-primary-foreground transition-colors">Registre des entreprises</Link></li>
                 <li><Link to="/a-propos" className="hover:text-primary-foreground transition-colors">À propos</Link></li>
               </ul>
             </div>
@@ -122,7 +122,7 @@ export default function PublicLayout() {
               <ul className="space-y-2 text-sm text-primary-foreground/70">
                 <li><Link to="/faq" className="hover:text-primary-foreground transition-colors">FAQ</Link></li>
                 <li><Link to="/contact" className="hover:text-primary-foreground transition-colors">Contact</Link></li>
-                <li>support@contenulocal.ne</li>
+                <li>registre@contenulocal.ne</li>
                 <li>+227 20 72 00 00</li>
               </ul>
             </div>
@@ -136,7 +136,7 @@ export default function PublicLayout() {
             </div>
           </div>
           <div className="border-t border-primary-foreground/20 mt-8 pt-8 text-center text-sm text-primary-foreground/50">
-            <p>© 2026 Ministère du Pétrole — République du Niger. Tous droits réservés.</p>
+            <p>© 2026 Ministère du Pétrole — République du Niger. Registre National du Contenu Local. Tous droits réservés.</p>
           </div>
         </div>
       </footer>

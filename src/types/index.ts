@@ -1,6 +1,17 @@
 export type UserRole = 'visiteur' | 'entreprise' | 'ministere';
 
-export type CompanyStatus = 'brouillon' | 'en_revue' | 'valide' | 'complement_demande' | 'suspendu' | 'expire';
+export type QualificationStatus =
+  | 'pre_enregistre'
+  | 'recense'
+  | 'dossier_complete'
+  | 'en_cours_qualification'
+  | 'qualifie'
+  | 'qualifie_avec_reserves'
+  | 'suspendu'
+  | 'a_mettre_a_jour';
+
+// Keep old type as alias for backward compat
+export type CompanyStatus = QualificationStatus;
 
 export type OpportunityStatus = 'publiee' | 'fermee' | 'archivee' | 'brouillon';
 
@@ -9,6 +20,8 @@ export type OpportunityType = 'ami' | 'sous_traitance' | 'consultation' | 'forma
 export type ApplicationStatus = 'brouillon' | 'soumise' | 'en_examen' | 'retenue' | 'non_retenue';
 
 export type NotificationType = 'validation' | 'document' | 'opportunite' | 'admin';
+
+export type StructureEmettriceType = 'ministere' | 'compagnie_petroliere' | 'sous_traitant_principal' | 'structure_sectorielle';
 
 export interface Company {
   id: string;
@@ -29,7 +42,7 @@ export interface Company {
   effectifTotal: number;
   effectifNigerien: number;
   tailleEntreprise: string;
-  status: CompanyStatus;
+  status: QualificationStatus;
   completionRate: number;
   dateInscription: string;
   derniereMiseAJour: string;
@@ -46,6 +59,7 @@ export interface Opportunity {
   region: string;
   description: string;
   structureEmettrice: string;
+  structureEmettriceType: StructureEmettriceType;
   datePublication: string;
   dateLimite: string;
   documentsRequis: string[];
@@ -83,7 +97,7 @@ export interface AuditEntry {
   details: string;
 }
 
-export const REGIONS = ['Niamey', 'Zinder', 'Diffa', 'Agadez', 'Tahoua', 'Maradi', 'Dosso'] as const;
+export const REGIONS = ['Niamey', 'Zinder', 'Diffa', 'Agadez', 'Tahoua', 'Maradi', 'Dosso', 'Tillabéri'] as const;
 
 export const CATEGORIES = [
   'Transport et logistique',
@@ -93,13 +107,22 @@ export const CATEGORIES = [
   'Électricité industrielle',
   'HSE',
   'Environnement',
-  'Catering',
+  'Catering / restauration',
   'Sécurité',
   'Location d\'engins',
   'TIC / digital',
-  'Formation',
+  'Formation professionnelle',
   'Consultance',
   'Fournitures industrielles',
+  'Services financiers',
+  'Banque / assurance / garantie',
+  'Hôtellerie / hébergement',
+  'RH / recrutement',
+  'Transit / douane',
+  'Services juridiques',
+  'Location de véhicules',
+  'Services administratifs',
+  'Fournitures de bureau',
 ] as const;
 
 export const OPPORTUNITY_TYPES: Record<OpportunityType, string> = {
@@ -109,14 +132,19 @@ export const OPPORTUNITY_TYPES: Record<OpportunityType, string> = {
   formation: 'Formation / renforcement des capacités',
 };
 
-export const STATUS_LABELS: Record<CompanyStatus, string> = {
-  brouillon: 'Brouillon',
-  en_revue: 'En revue',
-  valide: 'Validé',
-  complement_demande: 'Complément demandé',
+export const QUALIFICATION_STATUS_LABELS: Record<QualificationStatus, string> = {
+  pre_enregistre: 'Pré-enregistré',
+  recense: 'Recensé',
+  dossier_complete: 'Dossier complété',
+  en_cours_qualification: 'En cours de qualification',
+  qualifie: 'Qualifié',
+  qualifie_avec_reserves: 'Qualifié avec réserves',
   suspendu: 'Suspendu',
-  expire: 'Expiré',
+  a_mettre_a_jour: 'À mettre à jour',
 };
+
+// Keep old export for backward compat
+export const STATUS_LABELS = QUALIFICATION_STATUS_LABELS;
 
 export const APPLICATION_STATUS_LABELS: Record<ApplicationStatus, string> = {
   brouillon: 'Brouillon',
@@ -125,3 +153,19 @@ export const APPLICATION_STATUS_LABELS: Record<ApplicationStatus, string> = {
   retenue: 'Retenue',
   non_retenue: 'Non retenue',
 };
+
+export const STRUCTURE_EMETTRICE_LABELS: Record<StructureEmettriceType, string> = {
+  ministere: 'Ministère',
+  compagnie_petroliere: 'Compagnie pétrolière',
+  sous_traitant_principal: 'Sous-traitant principal',
+  structure_sectorielle: 'Structure sectorielle',
+};
+
+export const QUALIFICATION_STEPS = [
+  { key: 'inscription', label: 'Inscription' },
+  { key: 'recensement', label: 'Recensement' },
+  { key: 'verification', label: 'Vérification du dossier' },
+  { key: 'qualification', label: 'Qualification' },
+  { key: 'visibilite', label: 'Visibilité renforcée' },
+  { key: 'acces', label: 'Accès aux marchés' },
+] as const;

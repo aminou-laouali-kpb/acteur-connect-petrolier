@@ -8,8 +8,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { StatusBadge } from '@/components/StatusBadge';
 import { Progress } from '@/components/ui/progress';
 import { mockCompanies } from '@/data/mock-data';
-import { REGIONS } from '@/types';
-import { Search, Eye, CheckCircle, MessageSquare, RotateCcw } from 'lucide-react';
+import { REGIONS, QUALIFICATION_STATUS_LABELS } from '@/types';
+import type { QualificationStatus } from '@/types';
+import { Search, Eye, ShieldCheck, ShieldAlert, Ban, RefreshCw, RotateCcw, ClipboardList } from 'lucide-react';
 import { toast } from 'sonner';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
 import { Pagination } from '@/components/Pagination';
@@ -38,8 +39,10 @@ export default function CompanyManagement() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-heading font-bold">Gestion des entreprises</h1>
-        <p className="text-sm text-muted-foreground">{filtered.length} entreprise(s)</p>
+        <div>
+          <h1 className="text-2xl font-heading font-bold">Registre des entreprises — Parcours de qualification</h1>
+          <p className="text-sm text-muted-foreground">{filtered.length} entreprise(s) · Gestion du processus de qualification</p>
+        </div>
       </div>
 
       <div className="flex flex-wrap gap-3">
@@ -47,8 +50,19 @@ export default function CompanyManagement() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input placeholder="Rechercher..." value={search} onChange={e => { setSearch(e.target.value); setPage(1); }} className="pl-10" />
         </div>
-        <Select value={region} onValueChange={v => { setRegion(v); setPage(1); }}><SelectTrigger className="w-[150px]"><SelectValue placeholder="Région" /></SelectTrigger><SelectContent><SelectItem value="all">Toutes</SelectItem>{REGIONS.map(r=><SelectItem key={r} value={r}>{r}</SelectItem>)}</SelectContent></Select>
-        <Select value={status} onValueChange={v => { setStatus(v); setPage(1); }}><SelectTrigger className="w-[180px]"><SelectValue placeholder="Statut" /></SelectTrigger><SelectContent><SelectItem value="all">Tous statuts</SelectItem><SelectItem value="valide">Validé</SelectItem><SelectItem value="en_revue">En revue</SelectItem><SelectItem value="complement_demande">Complément</SelectItem><SelectItem value="brouillon">Brouillon</SelectItem><SelectItem value="suspendu">Suspendu</SelectItem></SelectContent></Select>
+        <Select value={region} onValueChange={v => { setRegion(v); setPage(1); }}>
+          <SelectTrigger className="w-[150px]"><SelectValue placeholder="Région" /></SelectTrigger>
+          <SelectContent><SelectItem value="all">Toutes</SelectItem>{REGIONS.map(r=><SelectItem key={r} value={r}>{r}</SelectItem>)}</SelectContent>
+        </Select>
+        <Select value={status} onValueChange={v => { setStatus(v); setPage(1); }}>
+          <SelectTrigger className="w-[220px]"><SelectValue placeholder="Statut" /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Tous statuts</SelectItem>
+            {(Object.entries(QUALIFICATION_STATUS_LABELS) as [QualificationStatus, string][]).map(([k, v]) => (
+              <SelectItem key={k} value={k}>{v}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
         {hasFilters && (
           <Button variant="ghost" size="sm" onClick={resetFilters}><RotateCcw className="mr-2 h-3 w-3" />Réinitialiser</Button>
         )}
@@ -63,7 +77,7 @@ export default function CompanyManagement() {
                 <TableHead>NIF</TableHead>
                 <TableHead>Région</TableHead>
                 <TableHead>Catégorie</TableHead>
-                <TableHead>Statut</TableHead>
+                <TableHead>Statut de qualification</TableHead>
                 <TableHead>Complétion</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
@@ -79,15 +93,29 @@ export default function CompanyManagement() {
                   <TableCell><div className="flex items-center gap-2"><Progress value={c.completionRate} className="w-16 h-2" /><span className="text-xs">{c.completionRate}%</span></div></TableCell>
                   <TableCell>
                     <div className="flex gap-1">
-                      <Button asChild variant="ghost" size="icon" title="Voir"><Link to={`/ministere/entreprises/${c.id}`}><Eye className="h-4 w-4" /></Link></Button>
+                      <Button asChild variant="ghost" size="icon" title="Voir le dossier"><Link to={`/ministere/entreprises/${c.id}`}><Eye className="h-4 w-4" /></Link></Button>
                       <ConfirmDialog
-                        trigger={<Button variant="ghost" size="icon" title="Valider"><CheckCircle className="h-4 w-4 text-success" /></Button>}
-                        title="Valider cette entreprise ?"
-                        description={`Confirmez-vous la validation de ${c.raisonSociale} ?`}
-                        confirmLabel="Valider"
-                        onConfirm={() => toast.success(`${c.sigle} validé`)}
+                        trigger={<Button variant="ghost" size="icon" title="Qualifier"><ShieldCheck className="h-4 w-4 text-success" /></Button>}
+                        title="Qualifier cette entreprise ?"
+                        description={`Confirmez-vous la qualification de ${c.raisonSociale} ?`}
+                        confirmLabel="Qualifier"
+                        onConfirm={() => toast.success(`${c.sigle} qualifié`)}
                       />
-                      <Button variant="ghost" size="icon" title="Demander complément" onClick={() => toast.info('Demande envoyée')}><MessageSquare className="h-4 w-4 text-warning" /></Button>
+                      <ConfirmDialog
+                        trigger={<Button variant="ghost" size="icon" title="Qualifier avec réserves"><ShieldAlert className="h-4 w-4 text-warning" /></Button>}
+                        title="Qualifier avec réserves ?"
+                        description={`Qualifier ${c.raisonSociale} avec des réserves à lever ?`}
+                        confirmLabel="Qualifier avec réserves"
+                        onConfirm={() => toast.info(`${c.sigle} qualifié avec réserves`)}
+                      />
+                      <Button variant="ghost" size="icon" title="Demander mise à jour" onClick={() => toast.info('Demande de mise à jour envoyée')}><RefreshCw className="h-4 w-4 text-gold" /></Button>
+                      <ConfirmDialog
+                        trigger={<Button variant="ghost" size="icon" title="Suspendre"><Ban className="h-4 w-4 text-destructive" /></Button>}
+                        title="Suspendre ce dossier ?"
+                        description={`Confirmez-vous la suspension du dossier de ${c.raisonSociale} ?`}
+                        confirmLabel="Suspendre"
+                        onConfirm={() => toast.error(`${c.sigle} suspendu`)}
+                      />
                     </div>
                   </TableCell>
                 </TableRow>
