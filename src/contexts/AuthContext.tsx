@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, type ReactNode } from 'react';
+import { createContext, useContext, useState, type ReactNode } from 'react';
 import type { UserRole, Company } from '@/types';
 import { mockCompanies } from '@/data/mock-data';
 
