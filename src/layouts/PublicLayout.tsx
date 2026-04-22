@@ -142,10 +142,10 @@ export default function PublicLayout() {
       </footer>
 
       {/* Sticky Copyright Saharan Impact */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-sm border-t border-slate-700 py-2">
-        <div className="container flex items-center justify-center gap-2 text-xs text-slate-400">
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-primary/95 backdrop-blur-sm border-t border-primary-foreground/20 py-2">
+        <div className="container flex items-center justify-center gap-2 text-xs text-primary-foreground/60">
           <span>Plateforme générée par</span>
-          <span className="font-semibold text-amber-500">Saharan Impact</span>
+          <span className="font-semibold text-gold">Saharan Impact</span>
           <span>— Tous droits réservés</span>
         </div>
       </div>
