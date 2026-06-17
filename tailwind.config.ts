@@ -63,6 +63,12 @@ export default {
           DEFAULT: "hsl(var(--warning))",
           foreground: "hsl(var(--warning-foreground))",
         },
+        petroleum: {
+          DEFAULT: "hsl(var(--petroleum-deep))",
+          foreground: "hsl(var(--petroleum-deep-foreground))",
+          accent: "hsl(var(--petroleum-accent))",
+          "accent-foreground": "hsl(var(--petroleum-accent-foreground))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
