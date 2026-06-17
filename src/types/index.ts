@@ -169,3 +169,78 @@ export const QUALIFICATION_STEPS = [
   { key: 'visibilite', label: 'Visibilité renforcée' },
   { key: 'acces', label: 'Accès aux marchés' },
 ] as const;
+
+// ============= Admin productivity types =============
+
+export type AgentNotificationCategory =
+  | 'nouveau_dossier'
+  | 'document_expire'
+  | 'mise_a_jour'
+  | 'relance_due'
+  | 'systeme';
+
+export type AgentNotificationSeverity = 'info' | 'attention' | 'urgent';
+
+export interface AgentNotification {
+  id: string;
+  category: AgentNotificationCategory;
+  severity: AgentNotificationSeverity;
+  titre: string;
+  message: string;
+  entrepriseId?: string;
+  entrepriseNom?: string;
+  date: string;
+  lu: boolean;
+  agentAssigne?: string;
+}
+
+export type AutomationTrigger =
+  | 'documents_complets'
+  | 'inactivite_15j'
+  | 'certificat_expirant'
+  | 'scoring_eleve'
+  | 'changement_statut';
+
+export interface AutomationRule {
+  id: string;
+  nom: string;
+  description: string;
+  trigger: AutomationTrigger;
+  action: string;
+  active: boolean;
+  derniereExecution?: string;
+  occurrences: number;
+}
+
+export interface MessageTemplate {
+  id: string;
+  nom: string;
+  objet: string;
+  corps: string;
+  categorie: string;
+}
+
+export interface AutomationLogEntry {
+  id: string;
+  ruleId: string;
+  ruleName: string;
+  cible: string;
+  date: string;
+  resultat: 'succes' | 'echec' | 'info';
+  details: string;
+}
+
+export interface AgentProfile {
+  id: string;
+  nom: string;
+  fonction: string;
+}
+
+export const AGENT_NOTIFICATION_CATEGORY_LABELS: Record<AgentNotificationCategory, string> = {
+  nouveau_dossier: 'Nouveau dossier',
+  document_expire: 'Document expirant',
+  mise_a_jour: 'Mise à jour soumise',
+  relance_due: 'Relance due',
+  systeme: 'Système',
+};
+

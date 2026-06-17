@@ -42,6 +42,9 @@ import ApplicationManagement from "@/pages/ministry/ApplicationManagement";
 import Reports from "@/pages/ministry/Reports";
 import AuditLog from "@/pages/ministry/AuditLog";
 import Settings from "@/pages/ministry/Settings";
+import QualificationQueue from "@/pages/ministry/QualificationQueue";
+import AgentInbox from "@/pages/ministry/AgentInbox";
+import Automations from "@/pages/ministry/Automations";
 
 import NotFound from "@/pages/NotFound";
 import ChatbotButton from "@/components/ChatbotButton";
@@ -88,8 +91,11 @@ const App = () => (
               <Route path="dashboard" element={<MinistryDashboard />} />
               <Route path="entreprises" element={<CompanyManagement />} />
               <Route path="entreprises/:id" element={<CompanyDetail />} />
+              <Route path="file" element={<QualificationQueue />} />
               <Route path="opportunites" element={<OpportunityManagement />} />
               <Route path="candidatures" element={<ApplicationManagement />} />
+              <Route path="notifications" element={<AgentInbox />} />
+              <Route path="automatisations" element={<Automations />} />
               <Route path="rapports" element={<Reports />} />
               <Route path="audit" element={<AuditLog />} />
               <Route path="parametres" element={<Settings />} />
