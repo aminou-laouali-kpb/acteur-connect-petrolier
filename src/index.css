@@ -41,6 +41,11 @@
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 100%;
 
+    --petroleum-deep: 207 70% 18%;
+    --petroleum-deep-foreground: 0 0% 100%;
+    --petroleum-accent: 188 78% 38%;
+    --petroleum-accent-foreground: 0 0% 100%;
+
     --sidebar-background: 215 28% 14%;
     --sidebar-foreground: 210 30% 90%;
     --sidebar-primary: 32 92% 37%;

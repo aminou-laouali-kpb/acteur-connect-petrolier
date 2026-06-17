@@ -1,12 +1,14 @@
 import { createContext, useContext, useState, type ReactNode } from 'react';
-import type { UserRole, Company } from '@/types';
+import type { UserRole, Company, OperateurOrganisation } from '@/types';
 import { mockCompanies } from '@/data/mock-data';
+import { sorazOrganisation } from '@/data/operateur-mock-data';
 
 interface AuthContextType {
   currentRole: UserRole;
   setCurrentRole: (role: UserRole) => void;
   isAuthenticated: boolean;
   currentCompany: Company | null;
+  currentOrganisation: OperateurOrganisation | null;
   login: (role?: UserRole) => void;
   logout: () => void;
   currentUser: { nom: string; email: string; role: string } | null;
@@ -19,10 +21,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const currentCompany = currentRole === 'entreprise' ? mockCompanies[0] : null;
+  const currentOrganisation = currentRole === 'operateur' ? sorazOrganisation : null;
 
   const currentUser = isAuthenticated
     ? currentRole === 'ministere'
       ? { nom: 'Amadou Boubacar', email: 'a.boubacar@petrole.gouv.ne', role: 'Administrateur' }
+      : currentRole === 'operateur'
+      ? { nom: sorazOrganisation.directeur, email: sorazOrganisation.email, role: sorazOrganisation.fonction }
       : { nom: 'Moussa Diallo', email: 'contact@ssi-niger.ne', role: 'Gérant' }
     : null;
 
@@ -46,7 +51,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ currentRole, setCurrentRole: handleSetRole, isAuthenticated, currentCompany, login, logout, currentUser }}>
+    <AuthContext.Provider value={{ currentRole, setCurrentRole: handleSetRole, isAuthenticated, currentCompany, currentOrganisation, login, logout, currentUser }}>
       {children}
     </AuthContext.Provider>
   );
