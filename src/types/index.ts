@@ -1,4 +1,92 @@
-export type UserRole = 'visiteur' | 'entreprise' | 'ministere';
+export type UserRole = 'visiteur' | 'entreprise' | 'ministere' | 'operateur';
+
+// ============= Donneur d'ordre (opérateur pétrolier) =============
+
+export type OperateurType = 'raffinerie' | 'distribution' | 'exploration' | 'transport';
+
+export interface OperateurOrganisation {
+  id: string;
+  nom: string;
+  sigle: string;
+  type: OperateurType;
+  directeur: string;
+  fonction: string;
+  email: string;
+  site: string;
+}
+
+export type TARPhase = 'scoping' | 'contracting' | 'pre_execution' | 'execution' | 'startup' | 'post_tar';
+
+export interface CampagneTAR {
+  id: string;
+  organisationId: string;
+  nom: string;
+  reference: string;
+  description: string;
+  dateArretPrevue: string;     // ISO
+  dureeArretJours: number;
+  phaseActuelle: TARPhase;
+  budgetMillionsFCFA: number;
+  objectifContenuLocalPct: number;
+  realiseContenuLocalPct: number;
+  effectifPicEstime: number;
+}
+
+export type LotStatut = 'identifie' | 'scope' | 'ao_lance' | 'attribue' | 'execute' | 'cloture';
+
+export interface LotTAR {
+  id: string;
+  campagneId: string;
+  reference: string;
+  intitule: string;
+  famille: string;            // famille métier (parmi categories)
+  description: string;
+  dureeJours: number;
+  effectifRequis: number;
+  certificationsRequises: string[];
+  budgetEstimeMFCFA: number;
+  statut: LotStatut;
+  attributaireId?: string;    // company id
+  prestatairesEligibles?: string[]; // ids présélectionnés
+}
+
+export type AOStatut = 'brouillon' | 'publie' | 'cloture' | 'attribue' | 'annule';
+
+export interface AppelOffreOperateur {
+  id: string;
+  campagneId: string;
+  lotId: string;
+  reference: string;
+  titre: string;
+  type: 'rfi' | 'rfq';
+  datePublication: string;
+  dateLimite: string;
+  invites: string[]; // company ids
+  statut: AOStatut;
+  ponderationTechnique: number;
+  ponderationFinanciere: number;
+  ponderationContenuLocal: number;
+  offres: OffreOperateur[];
+}
+
+export interface OffreOperateur {
+  id: string;
+  entrepriseId: string;
+  entrepriseNom: string;
+  noteTechnique: number;       // /100
+  noteFinanciere: number;      // /100
+  noteContenuLocal: number;    // /100
+  montantMFCFA: number;
+  effectifNigerienPct: number;
+  remarques?: string;
+}
+
+export interface EngagementContenuLocal {
+  campagneId: string;
+  poste: 'depenses_locales' | 'main_oeuvre_nigerienne' | 'materiaux_locaux';
+  objectifPct: number;
+  realisePct: number;
+}
 
 export type QualificationStatus =
   | 'pre_enregistre'
