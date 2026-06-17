@@ -23,9 +23,18 @@ const statusToStep: Record<string, number> = {
 
 export default function CompanyDashboard() {
   const { currentCompany } = useAuth();
-  const company = currentCompany!;
   const recentNotifs = mockNotifications.filter(n => !n.lu).slice(0, 3);
   const recommendedOpps = mockOpportunities.filter(o => o.statut === 'publiee').slice(0, 2);
+
+  if (!currentCompany) {
+    return (
+      <div className="p-6">
+        <p className="text-sm text-muted-foreground">Chargement de votre espace entreprise…</p>
+      </div>
+    );
+  }
+
+  const company = currentCompany;
   const currentStep = statusToStep[company.status] ?? 0;
 
   return (
