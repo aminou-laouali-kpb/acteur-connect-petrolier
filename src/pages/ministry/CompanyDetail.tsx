@@ -173,10 +173,22 @@ export default function CompanyDetail() {
               <p className="text-xs text-muted-foreground mb-2">Complétion du profil</p>
               <Progress value={company.completionRate} className="mb-2" />
               <p className="text-sm font-bold">{company.completionRate}%</p>
+              <div className="mt-3 pt-3 border-t flex items-center gap-2 text-xs">
+                <UserCog className="h-3 w-3 text-muted-foreground" />
+                <span className="text-muted-foreground">Agent :</span>
+                <Badge variant="secondary" className="text-[10px]">{mockCompanyAssignments[company.id] || 'Non assigné'}</Badge>
+              </div>
               <p className="text-xs text-muted-foreground mt-3">Inscrit le {new Date(company.dateInscription).toLocaleDateString('fr-FR')}</p>
               <p className="text-xs text-muted-foreground">Mis à jour le {new Date(company.derniereMiseAJour).toLocaleDateString('fr-FR')}</p>
             </CardContent>
           </Card>
+
+          {(() => { const s = computeCompanyScore(company.id); return (
+            <CompanyScoring score={s.score} recommandation={s.recommandation} justification={s.justification} onApply={() => toast.success(`Action « ${s.recommandation} » préparée`)} />
+          ); })()}
+
+          <ChecklistVerification companyId={company.id} />
+
 
           <Card>
             <CardHeader><CardTitle className="text-sm">Documents soumis</CardTitle></CardHeader>
