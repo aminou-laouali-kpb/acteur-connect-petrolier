@@ -9,6 +9,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import PublicLayout from "@/layouts/PublicLayout";
 import CompanyLayout from "@/layouts/CompanyLayout";
 import MinistryLayout from "@/layouts/MinistryLayout";
+import OperateurLayout from "@/layouts/OperateurLayout";
 
 // Public pages
 import HomePage from "@/pages/Index";
@@ -23,6 +24,7 @@ import ContactPage from "@/pages/Contact";
 // Auth pages
 import LoginPage from "@/pages/Login";
 import AdminLoginPage from "@/pages/AdminLogin";
+import OperateurLoginPage from "@/pages/OperateurLogin";
 import SignupPage from "@/pages/Signup";
 import ForgotPasswordPage from "@/pages/ForgotPassword";
 
@@ -45,6 +47,18 @@ import Settings from "@/pages/ministry/Settings";
 import QualificationQueue from "@/pages/ministry/QualificationQueue";
 import AgentInbox from "@/pages/ministry/AgentInbox";
 import Automations from "@/pages/ministry/Automations";
+
+// Operateur portal
+import OperateurDashboard from "@/pages/operateur/Dashboard";
+import OperateurCampagnes from "@/pages/operateur/Campagnes";
+import OperateurCampagneDetail from "@/pages/operateur/CampagneDetail";
+import OperateurRegistre from "@/pages/operateur/Registre";
+import OperateurAllotissement from "@/pages/operateur/Allotissement";
+import OperateurAppelsOffres from "@/pages/operateur/AppelsOffres";
+import OperateurAppelOffreDetail from "@/pages/operateur/AppelOffreDetail";
+import OperateurContenuLocal from "@/pages/operateur/ContenuLocal";
+import OperateurRapports from "@/pages/operateur/Rapports";
+import OperateurParametres from "@/pages/operateur/Parametres";
 
 import NotFound from "@/pages/NotFound";
 import ChatbotButton from "@/components/ChatbotButton";
@@ -74,6 +88,7 @@ const App = () => (
             {/* Auth routes */}
             <Route path="/connexion" element={<LoginPage />} />
             <Route path="/admin" element={<AdminLoginPage />} />
+            <Route path="/operateur" element={<OperateurLoginPage />} />
             <Route path="/inscription" element={<SignupPage />} />
             <Route path="/mot-de-passe-oublie" element={<ForgotPasswordPage />} />
 
@@ -99,6 +114,20 @@ const App = () => (
               <Route path="rapports" element={<Reports />} />
               <Route path="audit" element={<AuditLog />} />
               <Route path="parametres" element={<Settings />} />
+            </Route>
+
+            {/* Operateur (donneur d'ordre) portal */}
+            <Route path="/operateur" element={<OperateurLayout />}>
+              <Route path="dashboard" element={<OperateurDashboard />} />
+              <Route path="campagnes" element={<OperateurCampagnes />} />
+              <Route path="campagnes/:id" element={<OperateurCampagneDetail />} />
+              <Route path="registre" element={<OperateurRegistre />} />
+              <Route path="allotissement" element={<OperateurAllotissement />} />
+              <Route path="appels-offres" element={<OperateurAppelsOffres />} />
+              <Route path="appels-offres/:id" element={<OperateurAppelOffreDetail />} />
+              <Route path="contenu-local" element={<OperateurContenuLocal />} />
+              <Route path="rapports" element={<OperateurRapports />} />
+              <Route path="parametres" element={<OperateurParametres />} />
             </Route>
 
             <Route path="*" element={<NotFound />} />
