@@ -25,8 +25,16 @@ const tabCompletion: Record<string, boolean> = {
 
 export default function CompanyProfile() {
   const { currentCompany } = useAuth();
-  const c = currentCompany!;
   const [activeTab, setActiveTab] = useState('general');
+
+  if (!currentCompany) {
+    return (
+      <div className="p-6">
+        <p className="text-sm text-muted-foreground">Chargement de votre dossier…</p>
+      </div>
+    );
+  }
+  const c = currentCompany;
 
   const handleSave = () => toast.success('Dossier sauvegardé', { description: 'Vos modifications ont été enregistrées.' });
 
