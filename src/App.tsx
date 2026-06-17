@@ -91,8 +91,11 @@ const App = () => (
               <Route path="dashboard" element={<MinistryDashboard />} />
               <Route path="entreprises" element={<CompanyManagement />} />
               <Route path="entreprises/:id" element={<CompanyDetail />} />
+              <Route path="file" element={<QualificationQueue />} />
               <Route path="opportunites" element={<OpportunityManagement />} />
               <Route path="candidatures" element={<ApplicationManagement />} />
+              <Route path="notifications" element={<AgentInbox />} />
+              <Route path="automatisations" element={<Automations />} />
               <Route path="rapports" element={<Reports />} />
               <Route path="audit" element={<AuditLog />} />
               <Route path="parametres" element={<Settings />} />
