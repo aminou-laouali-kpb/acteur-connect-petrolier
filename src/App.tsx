@@ -42,6 +42,9 @@ import ApplicationManagement from "@/pages/ministry/ApplicationManagement";
 import Reports from "@/pages/ministry/Reports";
 import AuditLog from "@/pages/ministry/AuditLog";
 import Settings from "@/pages/ministry/Settings";
+import QualificationQueue from "@/pages/ministry/QualificationQueue";
+import AgentInbox from "@/pages/ministry/AgentInbox";
+import Automations from "@/pages/ministry/Automations";
 
 import NotFound from "@/pages/NotFound";
 import ChatbotButton from "@/components/ChatbotButton";
