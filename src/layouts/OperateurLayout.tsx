@@ -73,7 +73,7 @@ export default function OperateurLayout() {
   const { currentUser, currentOrganisation, currentRole, logout } = useAuth();
 
   if (currentRole !== 'operateur') {
-    return <Navigate to="/operateur" replace />;
+    return <Navigate to="/operateur-login" replace />;
   }
 
   return (
