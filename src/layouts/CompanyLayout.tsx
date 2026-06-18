@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { NavLink } from '@/components/NavLink';
 import { RoleSwitcher } from '@/components/RoleSwitcher';
@@ -65,7 +66,13 @@ function CompanySidebar() {
 }
 
 export default function CompanyLayout() {
-  const { currentCompany, logout } = useAuth();
+  const { currentRole, setCurrentRole, currentCompany, logout } = useAuth();
+
+  useEffect(() => {
+    if (currentRole !== 'entreprise') {
+      setCurrentRole('entreprise');
+    }
+  }, [currentRole, setCurrentRole]);
 
   return (
     <SidebarProvider>
