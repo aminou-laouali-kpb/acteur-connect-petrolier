@@ -10,11 +10,11 @@
 
 ### 1.1 Le back-end est-il réel ?
 
-**Non. À ce jour, il n'y a aucun back-end.** L'application est une maquette dynamique : React + Vite + TypeScript, sans Lovable Cloud / Supabase branché, sans table, sans écriture persistante.
+**Non. À ce jour, il n'y a aucun back-end.** L'application est une maquette dynamique : React + Vite + TypeScript, sans Lovable Cloud, sans table, sans écriture persistante.
 
 Concrètement :
 
-- Aucun dossier `src/integrations/supabase`, aucun dossier `supabase/`, aucune dépendance client base de données dans `package.json`.
+- Aucun dossier `src/integrations (couche base de données)`, aucune dépendance client base de données dans `package.json`.
 - Toutes les données proviennent de trois fichiers statiques : `src/data/mock-data.ts` (~420 lignes, 14 entreprises types), `src/data/admin-mock-data.ts`, `src/data/operateur-mock-data.ts`.
 - L'authentification est simulée (`src/contexts/AuthContext.tsx`) avec un sélecteur de rôle : visiteur, entreprise, ministère, opérateur. Identifiants de démo : `/admin` → `admin/admin`, `/operateur-login` → `soraz/soraz`.
 - Seule persistance existante : `localStorage`, sur trois écrans (checklist de vérification, recherches sauvegardées de l'administration, présélection de prestataires côté opérateur). Elle est locale au navigateur et disparaît si l'on change de poste.
